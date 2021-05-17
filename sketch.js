@@ -43,6 +43,18 @@ let leftArrow, rightArrow;     // holds the left and right UI images for our bas
 let ARROW_SIZE;                // UI button size
 let current_letter = 'a';      // current char being displayed on our basic 2D keyboard (starts with 'a')
 
+let submenu_opened = false;
+let submenu1 = false;
+let submenu2 = false;
+let submenu3 = false;
+let submenu4 = false;
+let submenu5 = false;
+let submenu6 = false;
+let submenu7 = false;
+let submenu8 = false;
+let submenu9 = false;
+
+
 // Runs once before the setup() and loads our data (images, phrases)
 function preload()
 {    
@@ -75,6 +87,7 @@ function draw()
 { 
   if(draw_finger_arm)
   {
+    //Supporting elements -- not change
     background(255);           // clear background
     noCursor();                // hides the cursor to simulate the 'fat finger'
     
@@ -105,18 +118,73 @@ function draw()
 // Draws 2D keyboard UI (current letter and left and right arrows)
 function draw2Dkeyboard()
 {
-  // Writes the current letter
-  textFont("Arial", 24);
-  fill(0);
-  text("" + current_letter, width/2, height/2); 
-  
-  // Draws and the left and right arrow buttons
-  noFill();
-  imageMode(CORNER);
-  image(leftArrow, width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE);
-  image(rightArrow, width/2, height/2, ARROW_SIZE, ARROW_SIZE);  
+  drawMainGrid();
+
+  if(submenu_opened) drawSubMenu();
 }
 
+function drawMainGrid() {
+  stroke(3);
+  line(width/2 - 1.0*PPCM, height/2 - 1.0*PPCM,
+      width/2 - 1.0*PPCM, height/2 + 2.0*PPCM)
+
+  line(width/2, height/2 - 1.0*PPCM,
+      width/2, height/2 + 2.0*PPCM)
+
+  line(width/2 + 1.0*PPCM, height/2 - 1.0*PPCM,
+      width/2 + 1.0*PPCM, height/2 + 2.0*PPCM)
+
+  line(width/2 - 2.0*PPCM, height/2 ,
+      width/2 + 2.0*PPCM, height/2)
+
+  line(width/2 - 2.0*PPCM, height/2 + 1.0*PPCM,
+      width/2 + 2.0*PPCM, height/2 + 1.0*PPCM)
+  noStroke();
+
+  textSize(14);
+  fill(0, 0, 0); //defines the text color
+  text('ABC', width/2 - 1.5*PPCM ,height/2 - 0.4*PPCM);
+  text('DEF', width/2 - 0.5*PPCM ,height/2 - 0.4*PPCM);
+  text('GHI', width/2 + 0.5*PPCM ,height/2 - 0.4*PPCM);
+  text('<-', width/2 + 1.5*PPCM ,height/2 - 0.4*PPCM);
+
+  text('JKL', width/2 - 1.5*PPCM ,height/2 + 0.6*PPCM);
+  text('MNO', width/2 - 0.5*PPCM ,height/2 + 0.6*PPCM);
+  text('PQR', width/2 + 0.5*PPCM ,height/2 + 0.6*PPCM);
+  text('\'', width/2 + 1.5*PPCM ,height/2 + 0.6*PPCM);
+
+  text('STU', width/2 - 1.5*PPCM ,height/2 + 1.6*PPCM);
+  text('VWX', width/2 - 0.5*PPCM ,height/2 + 1.6*PPCM);
+  text('YZ', width/2 + 0.5*PPCM ,height/2 + 1.6*PPCM);
+  text('-___-', width/2 + 1.5*PPCM ,height/2 + 1.6*PPCM);
+}
+
+function drawSubMenu() {
+  //Deaws the new "canvas"
+  stroke(2);
+  fill(255, 255, 255);
+  rect(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 3.5*PPCM, 2.5*PPCM);
+  noStroke();
+
+  //Draws the guidelines
+  fill(0, 0, 0);
+  stroke(2);
+  line(width/2 - 1.75*PPCM, height/2 + 0.5*PPCM,
+      width/2 + 1.75*PPCM, height/2 + 0.5*PPCM )
+
+  line(width/2 - 0.58*PPCM, height/2 - 0.75*PPCM,
+      width/2 - 0.58*PPCM, height/2 + 0.5*PPCM )
+
+  line(width/2 + 0.58*PPCM, height/2 - 0.75*PPCM,
+      width/2 + 0.58*PPCM, height/2 + 0.5*PPCM )
+  noStroke();
+
+
+  //Draws the cancel "button"
+  textSize(18);
+  fill(0, 0, 0);
+  text('Cancel', width/2, height/2 + 1.225*PPCM);
+}
 // Evoked when the mouse button was pressed
 function mousePressed()
 {
@@ -125,7 +193,8 @@ function mousePressed()
   {                   
     // Check if mouse click happened within the touch input area
     if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  
-    {      
+    {
+      /*
       // Check if mouse click was on left arrow (2D keyboard)
       if (mouseClickWithin(width/2 - ARROW_SIZE, height/2, ARROW_SIZE, ARROW_SIZE))
       {
@@ -146,6 +215,44 @@ function mousePressed()
           currently_typed = currently_typed.substring(0, currently_typed.length - 1);
         else if (current_letter != '`') currently_typed += current_letter;          // if not any of the above cases, add the current letter to the entered phrase
       }
+       */
+      if(!submenu_opened) {
+        if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+          //open submenu 1
+          submenu_opened = true;
+          currently_typed += '1';
+
+        } else if (mouseClickWithin(width / 2 - 1.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+          //open submenu 2
+          currently_typed += '2';
+        } else if (mouseClickWithin(width / 2, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+          //open submenu 3
+          currently_typed += '3';
+        } else if (mouseClickWithin(width / 2 + 1.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+          //open submenu 4
+          currently_typed += '4';
+        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+
+        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+
+        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+
+        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+
+        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+
+        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+
+        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+
+        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+
+        }
+      }
+      else {
+
+      }
+
     }
     
     // Check if mouse click happened within 'ACCEPT' 

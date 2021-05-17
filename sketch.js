@@ -160,7 +160,7 @@ function drawMainGrid() {
 }
 
 function drawSubMenu() {
-  //Deaws the new "canvas"
+  //Draws the new "canvas"
   stroke(2);
   fill(255, 255, 255);
   rect(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 3.5*PPCM, 2.5*PPCM);
@@ -184,6 +184,21 @@ function drawSubMenu() {
   textSize(18);
   fill(0, 0, 0);
   text('Cancel', width/2, height/2 + 1.225*PPCM);
+
+  let letters_to_be_written;
+  if(submenu1) letters_to_be_written = ['A', 'B', 'C'];
+  else if(submenu2) letters_to_be_written = ['D', 'E', 'F'];
+  else if(submenu3) letters_to_be_written = ['G', 'H', 'I'];
+  else if(submenu4) letters_to_be_written = ['J', 'K', 'L'];
+  else if(submenu5) letters_to_be_written = ['M', 'N', 'O'];
+  else if(submenu6) letters_to_be_written = ['P', 'Q', 'R'];
+  else if(submenu7) letters_to_be_written = ['S', 'T', 'U'];
+  else if(submenu8) letters_to_be_written = ['V', 'W', 'X'];
+  else letters_to_be_written = ['Y', '', 'Z'];
+
+  text(letters_to_be_written[0], width/2 - 1.165*PPCM, height/2);
+  text(letters_to_be_written[1], width/2, height/2);
+  text(letters_to_be_written[2], width/2 + 1.165*PPCM, height/2);
 }
 // Evoked when the mouse button was pressed
 function mousePressed()
@@ -216,43 +231,233 @@ function mousePressed()
         else if (current_letter != '`') currently_typed += current_letter;          // if not any of the above cases, add the current letter to the entered phrase
       }
        */
+      //If the user is in the main screen
       if(!submenu_opened) {
-        if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+        if (mouseClickWithin(width / 2 - 2.0 * PPCM,
+            height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 1
           submenu_opened = true;
-          currently_typed += '1';
-
-        } else if (mouseClickWithin(width / 2 - 1.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-          //open submenu 2
-          currently_typed += '2';
-        } else if (mouseClickWithin(width / 2, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-          //open submenu 3
-          currently_typed += '3';
-        } else if (mouseClickWithin(width / 2 + 1.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-          //open submenu 4
-          currently_typed += '4';
-        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-
-        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-
-        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-
-        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-
-        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-
-        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-
-        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-
-        } else if (mouseClickWithin(width / 2 - 2.0 * PPCM, height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+          submenu1 = true;
 
         }
+        else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
+            height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+          //open submenu 2
+          submenu_opened = true;
+          submenu2 = true;
+
+        }
+        else if (mouseClickWithin(width / 2,
+            height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+          //open submenu 3
+          submenu_opened = true;
+          submenu3 = true;
+
+        }
+        //If the user clicks on the space
+        else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
+            height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+          currently_typed = currently_typed.substring(0, currently_typed.length - 1);
+        }
+        else if (mouseClickWithin(width / 2 - 2.0 * PPCM,
+            height / 2, PPCM, PPCM)) {
+          //open submenu 4
+          submenu_opened = true;
+          submenu4 = true;
+
+        }
+        else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
+            height / 2, PPCM, PPCM)) {
+          //open submenu 5
+          submenu_opened = true;
+          submenu5 = true;
+
+        }
+        else if (mouseClickWithin(width / 2,
+            height / 2, PPCM, PPCM)) {
+          //open submenu 6
+          submenu_opened = true;
+          submenu6 = true;
+
+        }
+        //If the user clicks '
+        else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
+            height / 2, PPCM, PPCM)) {
+          currently_typed += '\'';
+
+        }
+        else if (mouseClickWithin(width / 2 - 2.0 * PPCM,
+            height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
+          //open submenu 7
+          submenu_opened = true;
+          submenu7 = true;
+
+        }
+        else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
+            height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
+          //open submenu 8
+          submenu_opened = true;
+          submenu8 = true;
+
+        }
+        else if (mouseClickWithin(width / 2,
+            height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
+          //open submenu 9
+          submenu_opened = true;
+          submenu9 = true;
+
+        }
+        //If the user clicks the backspace
+        else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
+            height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
+          if(currently_typed.length > 0)
+            currently_typed += ' ';
+        }
       }
+      //If the user is in one of the submenus
       else {
 
+        if(mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 3.5*PPCM, 2.5*PPCM)) {
+          //if the user is clicking the cancel button
+          if(mouseClickWithin(width/2 - 1.75*PPCM, height/2 + 0.5*PPCM, 3.5*PPCM, 1.25*PPCM)) {
+            submenu1 = false;
+            submenu2 = false;
+            submenu3 = false;
+            submenu4 = false;
+            submenu5 = false;
+            submenu6 = false;
+            submenu7 = false;
+            submenu8 = false;
+            submenu9 = false;
+            submenu_opened = false;
+          }
+          //The first upper square
+          if(mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
+            if(submenu1) {
+              currently_typed += 'a';
+              submenu1 = false;
+            }
+            else if(submenu2) {
+              currently_typed += 'd';
+              submenu2 = false;
+            }
+            else if(submenu3) {
+              currently_typed += 'g';
+              submenu3 = false;
+            }
+            else if(submenu4) {
+              currently_typed += 'j';
+              submenu4 = false;
+            }
+            else if(submenu5) {
+              currently_typed += 'm';
+              submenu5 = false;
+            }
+            else if(submenu6) {
+              currently_typed += 'p';
+              submenu6 = false;
+            }
+            else if(submenu7) {
+              currently_typed += 's';
+              submenu7 = false;
+            }
+            else if(submenu8) {
+              currently_typed += 'v';
+              submenu8 = false;
+            }
+            else if(submenu9) {
+              currently_typed += 'y';
+              submenu9 = false;
+            }
+            submenu_opened = false; //So that we stop drawing the submenu
+          }
+          //The second upper square
+          else if(mouseClickWithin(width/2 - 0.58*PPCM, height/2 - 0.75*PPCM, 1.16*PPCM, 1.25*PPCM)) {
+            if(submenu1) {
+              currently_typed += 'b';
+              submenu1 = false;
+              //submenu_opened = false; //So that we stop drawing the submenu
+            }
+            else if(submenu2) {
+              currently_typed += 'e';
+              submenu2 = false;
+              //submenu_opened = false; //So that we stop drawing the submenu
+            }
+            else if(submenu3) {
+              currently_typed += 'h';
+              submenu3 = false;
+              //submenu_opened = false; //So that we stop drawing the submenu
+            }
+            else if(submenu4) {
+              currently_typed += 'k';
+              submenu4 = false;
+              //submenu_opened = false; //So that we stop drawing the submenu
+            }
+            else if(submenu5) {
+              currently_typed += 'n';
+              submenu5 = false;
+              submenu_opened = false; //So that we stop drawing the submenu
+            }
+            else if(submenu6) {
+              currently_typed += 'q';
+              submenu6 = false;
+              //submenu_opened = false; //So that we stop drawing the submenu
+            }
+            else if(submenu7) {
+              currently_typed += 't';
+              submenu7 = false;
+              //submenu_opened = false; //So that we stop drawing the submenu
+            }
+            else if(submenu8) {
+              currently_typed += 'w';
+              submenu8 = false;
+              //submenu_opened = false; //So that we stop drawing the submenu
+            }
+            else if(submenu9) {return;} //This one is empty
+            submenu_opened = false; //So that we stop drawing the submenu
+          }
+          //The third upper square
+          else if(mouseClickWithin(width/2 + 0.58*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
+            if(submenu1) {
+              currently_typed += 'c';
+              submenu1 = false;
+            }
+            else if(submenu2) {
+              currently_typed += 'f';
+              submenu2 = false;
+            }
+            else if(submenu3) {
+              currently_typed += 'i';
+              submenu3 = false;
+            }
+            else if(submenu4) {
+              currently_typed += 'l';
+              submenu4 = false;
+            }
+            else if(submenu5) {
+              currently_typed += 'o';
+              submenu5 = false;
+            }
+            else if(submenu6) {
+              currently_typed += 'r';
+              submenu6 = false;
+            }
+            else if(submenu7) {
+              currently_typed += 'u';
+              submenu7 = false;
+            }
+            else if(submenu8) {
+              currently_typed += 'x';
+              submenu8 = false;
+            }
+            else if(submenu9) {
+              currently_typed += 'z';
+              submenu9 = false;
+            }
+            submenu_opened = false; //So that we stop drawing the submenu
+          }
+        }
       }
-
     }
     
     // Check if mouse click happened within 'ACCEPT' 

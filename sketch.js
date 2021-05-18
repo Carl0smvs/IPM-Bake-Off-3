@@ -43,6 +43,9 @@ let leftArrow, rightArrow;     // holds the left and right UI images for our bas
 let ARROW_SIZE;                // UI button size
 let current_letter = 'a';      // current char being displayed on our basic 2D keyboard (starts with 'a')
 
+let letters_menu;
+let letters_submenu;
+
 let submenu_opened = false;
 let submenu1 = false;
 let submenu2 = false;
@@ -53,6 +56,8 @@ let submenu6 = false;
 let submenu7 = false;
 let submenu8 = false;
 let submenu9 = false;
+
+let submenu = 0;
 
 
 // Runs once before the setup() and loads our data (images, phrases)
@@ -185,20 +190,59 @@ function drawSubMenu() {
   fill(0, 0, 0);
   text('Cancel', width/2, height/2 + 1.225*PPCM);
 
-  let letters_to_be_written;
-  if(submenu1) letters_to_be_written = ['A', 'B', 'C'];
-  else if(submenu2) letters_to_be_written = ['D', 'E', 'F'];
-  else if(submenu3) letters_to_be_written = ['G', 'H', 'I'];
-  else if(submenu4) letters_to_be_written = ['J', 'K', 'L'];
-  else if(submenu5) letters_to_be_written = ['M', 'N', 'O'];
-  else if(submenu6) letters_to_be_written = ['P', 'Q', 'R'];
-  else if(submenu7) letters_to_be_written = ['S', 'T', 'U'];
-  else if(submenu8) letters_to_be_written = ['V', 'W', 'X'];
-  else letters_to_be_written = ['Y', '', 'Z'];
+  switch (submenu) {
+    case 1: {
+      letters_menu = ['A', 'B', 'C'];
+      letters_submenu = ['a', 'b', 'c'];
+      break;
+    }
+    case 2: {
+      letters_menu = ['D', 'E', 'F'];
+      letters_submenu = ['d', 'e', 'f'];
+      break;
+    }
+    case 3: {
+      letters_menu = ['G', 'H', 'I'];
+      letters_submenu = ['g', 'h', 'i'];
+      break;
+    }
+    case 4: {
+      letters_menu = ['J', 'K', 'L'];
+      letters_submenu = ['j', 'k', 'l'];
+      break;
+    }
+    case 5: {
+      letters_menu = ['M', 'N', 'O'];
+      letters_submenu = ['m', 'n', 'o'];
+      break;
+    }
+    case 6: {
+      letters_menu = ['P', 'Q', 'R'];
+      letters_submenu = ['p', 'q', 'r'];
+      break;
+    }
+    case 7: {
+      letters_menu = ['S', 'T', 'U'];
+      letters_submenu = ['s', 't', 'u'];
+      break;
+    }
+    case 8: {
+      letters_menu = ['V', 'W', 'X'];
+      letters_submenu = ['v', 'w', 'x'];
+      break;
+    }
+    case 9: {
+      letters_menu = ['Y', '', 'Z'];
+      letters_submenu = ['y', '', 'z'];
+      break;
+    }
+    default:
+      break;
+  }
 
-  text(letters_to_be_written[0], width/2 - 1.165*PPCM, height/2);
-  text(letters_to_be_written[1], width/2, height/2);
-  text(letters_to_be_written[2], width/2 + 1.165*PPCM, height/2);
+  text(letters_menu[0], width/2 - 1.165*PPCM, height/2);
+  text(letters_menu[1], width/2, height/2);
+  text(letters_menu[2], width/2 + 1.165*PPCM, height/2);
 }
 // Evoked when the mouse button was pressed
 function mousePressed()
@@ -209,30 +253,32 @@ function mousePressed()
     // Check if mouse click happened within the touch input area
     if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  
     {
+      textSize(14);
       //If the user is in the main screen
       if(!submenu_opened) {
         if (mouseClickWithin(width / 2 - 2.0 * PPCM,
             height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 1
           submenu_opened = true;
-          submenu1 = true;
+          submenu = 1;
 
         }
         else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
             height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 2
           submenu_opened = true;
-          submenu2 = true;
+          submenu = 2;
 
         }
         else if (mouseClickWithin(width / 2,
             height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 3
           submenu_opened = true;
-          submenu3 = true;
+          submenu = 3;
+
 
         }
-        //If the user clicks on the space
+        //If the user clicks on the backspace
         else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
             height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
           currently_typed = currently_typed.substring(0, currently_typed.length - 1);
@@ -241,21 +287,21 @@ function mousePressed()
             height / 2, PPCM, PPCM)) {
           //open submenu 4
           submenu_opened = true;
-          submenu4 = true;
+          submenu = 4;
 
         }
         else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
             height / 2, PPCM, PPCM)) {
           //open submenu 5
           submenu_opened = true;
-          submenu5 = true;
+          submenu = 5;
 
         }
         else if (mouseClickWithin(width / 2,
             height / 2, PPCM, PPCM)) {
           //open submenu 6
           submenu_opened = true;
-          submenu6 = true;
+          submenu = 6;
 
         }
         //If the user clicks '
@@ -268,24 +314,24 @@ function mousePressed()
             height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 7
           submenu_opened = true;
-          submenu7 = true;
+          submenu = 7;
 
         }
         else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
             height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 8
           submenu_opened = true;
-          submenu8 = true;
+          submenu = 8;
 
         }
         else if (mouseClickWithin(width / 2,
             height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 9
           submenu_opened = true;
-          submenu9 = true;
+          submenu = 9;
 
         }
-        //If the user clicks the backspace
+        //If the user clicks the space
         else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
             height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
           if(currently_typed.length > 0)
@@ -294,145 +340,25 @@ function mousePressed()
       }
       //If the user is in one of the submenus
       else {
-
+        //If the user clicks in the submenu
         if(mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 3.5*PPCM, 2.5*PPCM)) {
           //if the user is clicking the cancel button
           if(mouseClickWithin(width/2 - 1.75*PPCM, height/2 + 0.5*PPCM, 3.5*PPCM, 1.25*PPCM)) {
-            submenu1 = false;
-            submenu2 = false;
-            submenu3 = false;
-            submenu4 = false;
-            submenu5 = false;
-            submenu6 = false;
-            submenu7 = false;
-            submenu8 = false;
-            submenu9 = false;
+            submenu = 0;
             submenu_opened = false;
           }
-          //The first upper square
-          if(mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
-            if(submenu1) {
-              currently_typed += 'a';
-              submenu1 = false;
-            }
-            else if(submenu2) {
-              currently_typed += 'd';
-              submenu2 = false;
-            }
-            else if(submenu3) {
-              currently_typed += 'g';
-              submenu3 = false;
-            }
-            else if(submenu4) {
-              currently_typed += 'j';
-              submenu4 = false;
-            }
-            else if(submenu5) {
-              currently_typed += 'm';
-              submenu5 = false;
-            }
-            else if(submenu6) {
-              currently_typed += 'p';
-              submenu6 = false;
-            }
-            else if(submenu7) {
-              currently_typed += 's';
-              submenu7 = false;
-            }
-            else if(submenu8) {
-              currently_typed += 'v';
-              submenu8 = false;
-            }
-            else if(submenu9) {
-              currently_typed += 'y';
-              submenu9 = false;
-            }
-            submenu_opened = false; //So that we stop drawing the submenu
+          //if the user clicks in the first upper square
+          else if (mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
+            currently_typed += letters_submenu[0];
           }
-          //The second upper square
-          else if(mouseClickWithin(width/2 - 0.58*PPCM, height/2 - 0.75*PPCM, 1.16*PPCM, 1.25*PPCM)) {
-            if(submenu1) {
-              currently_typed += 'b';
-              submenu1 = false;
-              //submenu_opened = false; //So that we stop drawing the submenu
-            }
-            else if(submenu2) {
-              currently_typed += 'e';
-              submenu2 = false;
-              //submenu_opened = false; //So that we stop drawing the submenu
-            }
-            else if(submenu3) {
-              currently_typed += 'h';
-              submenu3 = false;
-              //submenu_opened = false; //So that we stop drawing the submenu
-            }
-            else if(submenu4) {
-              currently_typed += 'k';
-              submenu4 = false;
-              //submenu_opened = false; //So that we stop drawing the submenu
-            }
-            else if(submenu5) {
-              currently_typed += 'n';
-              submenu5 = false;
-              submenu_opened = false; //So that we stop drawing the submenu
-            }
-            else if(submenu6) {
-              currently_typed += 'q';
-              submenu6 = false;
-              //submenu_opened = false; //So that we stop drawing the submenu
-            }
-            else if(submenu7) {
-              currently_typed += 't';
-              submenu7 = false;
-              //submenu_opened = false; //So that we stop drawing the submenu
-            }
-            else if(submenu8) {
-              currently_typed += 'w';
-              submenu8 = false;
-              //submenu_opened = false; //So that we stop drawing the submenu
-            }
-            else if(submenu9) {return;} //This one is empty
-            submenu_opened = false; //So that we stop drawing the submenu
+          //if the user clicks in the second upper square
+          else if (mouseClickWithin(width/2 - 0.58*PPCM, height/2 - 0.75*PPCM, 1.16*PPCM, 1.25*PPCM)) {
+            if(submenu !== 9)
+              currently_typed += letters_submenu[1];
           }
-          //The third upper square
-          else if(mouseClickWithin(width/2 + 0.58*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
-            if(submenu1) {
-              currently_typed += 'c';
-              submenu1 = false;
-            }
-            else if(submenu2) {
-              currently_typed += 'f';
-              submenu2 = false;
-            }
-            else if(submenu3) {
-              currently_typed += 'i';
-              submenu3 = false;
-            }
-            else if(submenu4) {
-              currently_typed += 'l';
-              submenu4 = false;
-            }
-            else if(submenu5) {
-              currently_typed += 'o';
-              submenu5 = false;
-            }
-            else if(submenu6) {
-              currently_typed += 'r';
-              submenu6 = false;
-            }
-            else if(submenu7) {
-              currently_typed += 'u';
-              submenu7 = false;
-            }
-            else if(submenu8) {
-              currently_typed += 'x';
-              submenu8 = false;
-            }
-            else if(submenu9) {
-              currently_typed += 'z';
-              submenu9 = false;
-            }
-            submenu_opened = false; //So that we stop drawing the submenu
+          //if the user clicks in the third upper square
+          else if (mouseClickWithin(width/2 + 0.58*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
+            currently_typed += letters_submenu[2];
           }
         }
       }

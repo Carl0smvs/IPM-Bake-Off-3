@@ -47,16 +47,6 @@ let letters_menu;
 let letters_submenu;
 
 let submenu_opened = false;
-let submenu1 = false;
-let submenu2 = false;
-let submenu3 = false;
-let submenu4 = false;
-let submenu5 = false;
-let submenu6 = false;
-let submenu7 = false;
-let submenu8 = false;
-let submenu9 = false;
-
 let submenu = 0;
 
 
@@ -102,12 +92,8 @@ function draw()
     
     // Draws the non-interactive screen area (4x1cm) -- DO NOT CHANGE SIZE!
     noStroke();
-    fill(125);
+    fill(125); //:TODO Change this?
     rect(width/2 - 2.0*PPCM, height/2 - 2.0*PPCM, 4.0*PPCM, 1.0*PPCM);
-    textAlign(CENTER); 
-    textFont("Arial", 16);
-    fill(0);
-    text("NOT INTERACTIVE", width/2, height/2 - 1.3 * PPCM);
 
     // Draws the touch input area (4x3cm) -- DO NOT CHANGE SIZE!
     stroke(0, 255, 0);
@@ -119,6 +105,8 @@ function draw()
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
 
     draw2Dkeyboard();       // draws our basic 2D keyboard UI
+
+    drawUpperScreen();
 
     drawFatFinger();        // draws the finger that simulates the 'fat finger' problem
   }
@@ -248,6 +236,49 @@ function drawSubMenu() {
   text(letters_menu[1], width/2, height/2);
   text(letters_menu[2], width/2 + 1.165*PPCM, height/2);
 }
+
+//Draws the non-interactive area
+function drawUpperScreen() {
+  const letterDistance = 0.2*PPCM;
+
+  textAlign(LEFT);
+  textSize(18);
+  fill(0, 0, 0);
+
+  let initialWidth = width/ 2 - 1.8*PPCM;
+  let numberLetters = 3.6* PPCM / letterDistance;
+
+  if(int(numberLetters/2) >= currently_typed.length) {
+    for(let i = 0; i < numberLetters; i++) {
+      text(phrases[current_trial][i], initialWidth, height / 2 - 1.3 * PPCM);
+      initialWidth += textWidth(phrases[current_trial][i]);
+    }
+  }
+  else {
+    for (let i = 0; i < numberLetters; i++) {
+      text(phrases[current_trial][currently_typed.length - int(numberLetters/2) + i], initialWidth, height / 2 - 1.3 * PPCM);
+      initialWidth += textWidth(phrases[current_trial][currently_typed.length - int(numberLetters/2) + i]);
+    }
+  }
+
+  initialWidth = width/ 2 - 1.8*PPCM;
+
+  for(let i = 0; i < currently_typed.length; i++) {
+    if (i > currently_typed.length - 1 - int(numberLetters / 2) && i <= currently_typed.length - 1 + int(numberLetters / 2)) {
+      if (i >= phrases[current_trial].length || phrases[current_trial][i] !== currently_typed[i]) {
+        fill(255, 0, 0);
+      } else {
+        fill(0, 128, 0);
+      }
+      text(currently_typed[i], initialWidth, height / 2 - 1.3 * PPCM);
+
+      initialWidth += textWidth(phrases[current_trial][i]);
+    }
+  }
+
+  textAlign(CENTER);
+}
+
 // Evoked when the mouse button was pressed
 function mousePressed()
 {
@@ -265,22 +296,18 @@ function mousePressed()
           //open submenu 1
           submenu_opened = true;
           submenu = 1;
-
         }
         else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
             height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 2
           submenu_opened = true;
           submenu = 2;
-
         }
         else if (mouseClickWithin(width / 2,
             height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 3
           submenu_opened = true;
           submenu = 3;
-
-
         }
         //If the user clicks on the backspace
         else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
@@ -292,21 +319,18 @@ function mousePressed()
           //open submenu 4
           submenu_opened = true;
           submenu = 4;
-
         }
         else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
             height / 2, PPCM, PPCM)) {
           //open submenu 5
           submenu_opened = true;
           submenu = 5;
-
         }
         else if (mouseClickWithin(width / 2,
             height / 2, PPCM, PPCM)) {
           //open submenu 6
           submenu_opened = true;
           submenu = 6;
-
         }
         //If the user clicks '
         else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
@@ -319,21 +343,18 @@ function mousePressed()
           //open submenu 7
           submenu_opened = true;
           submenu = 7;
-
         }
         else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
             height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 8
           submenu_opened = true;
           submenu = 8;
-
         }
         else if (mouseClickWithin(width / 2,
             height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
           //open submenu 9
           submenu_opened = true;
           submenu = 9;
-
         }
         //If the user clicks the space
         else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
@@ -346,13 +367,8 @@ function mousePressed()
       else {
         //If the user clicks in the submenu
         if(mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 3.5*PPCM, 2.5*PPCM)) {
-          //if the user is clicking the cancel button
-          if(mouseClickWithin(width/2 - 1.75*PPCM, height/2 + 0.5*PPCM, 3.5*PPCM, 1.25*PPCM)) {
-            submenu = 0;
-            submenu_opened = false;
-          }
           //if the user clicks in the first upper square
-          else if (mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
+          if (mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
             currently_typed += letters_submenu[0];
           }
           //if the user clicks in the second upper square
@@ -364,6 +380,8 @@ function mousePressed()
           else if (mouseClickWithin(width/2 + 0.58*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
             currently_typed += letters_submenu[2];
           }
+          submenu = 0;
+          submenu_opened = false;
         }
       }
     }

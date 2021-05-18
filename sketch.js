@@ -111,7 +111,11 @@ function draw()
 
     // Draws the touch input area (4x3cm) -- DO NOT CHANGE SIZE!
     stroke(0, 255, 0);
-    noFill();
+    if(submenu_opened)
+      fill(128, 128, 128);
+    else
+      noFill();
+
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
 
     draw2Dkeyboard();       // draws our basic 2D keyboard UI
@@ -124,7 +128,6 @@ function draw()
 function draw2Dkeyboard()
 {
   drawMainGrid();
-
   if(submenu_opened) drawSubMenu();
 }
 
@@ -190,6 +193,7 @@ function drawSubMenu() {
   fill(0, 0, 0);
   text('Cancel', width/2, height/2 + 1.225*PPCM);
 
+  //Defines the appearance and interactivity of each submenu
   switch (submenu) {
     case 1: {
       letters_menu = ['A', 'B', 'C'];

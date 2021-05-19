@@ -8,6 +8,7 @@
 // Database (CHANGE THESE!)
 const GROUP_NUMBER   = 41;      // add your group number here as an integer (e.g., 2, 3)
 const BAKE_OFF_DAY   = false;  // set to 'true' before sharing during the simulation and bake-off days
+const CLICK_TIMEOUT = 0.6;     //in seconds
 
 let PPI, PPCM;                 // pixel density (DO NOT CHANGE!)
 let second_attempt_button;     // button that starts the second attempt (DO NOT CHANGE!)
@@ -44,10 +45,11 @@ let ARROW_SIZE;                // UI button size
 let current_letter = 'a';      // current char being displayed on our basic 2D keyboard (starts with 'a')
 
 let letters_menu;
-let letters_submenu;
-
-let submenu_opened = false;
-let submenu = 0;
+let lastMenu = 0;
+let timer = CLICK_TIMEOUT*1000  // in milliseconds
+let nextChange;
+let lastLetter = '';
+let lastWord = '';
 
 
 // Runs once before the setup() and loads our data (images, phrases)
@@ -97,11 +99,7 @@ function draw()
 
     // Draws the touch input area (4x3cm) -- DO NOT CHANGE SIZE!
     stroke(0, 255, 0);
-    if(submenu_opened)
-      fill(128, 128, 128);
-    else
-      noFill();
-
+    fill(255, 255, 255);
     rect(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM);
 
     draw2Dkeyboard();       // draws our basic 2D keyboard UI
@@ -116,21 +114,22 @@ function draw()
 function draw2Dkeyboard()
 {
   drawMainGrid();
-  if(submenu_opened) drawSubMenu();
 }
 
 function drawMainGrid() {
   stroke(3);
+  //Vertical guides
   line(width/2 - 1.0*PPCM, height/2 - 1.0*PPCM,
       width/2 - 1.0*PPCM, height/2 + 2.0*PPCM)
 
   line(width/2, height/2 - 1.0*PPCM,
       width/2, height/2 + 2.0*PPCM)
 
-  line(width/2 + 1.0*PPCM, height/2 - 1.0*PPCM,
+  line(width/2 + 1.0*PPCM, height/2,
       width/2 + 1.0*PPCM, height/2 + 2.0*PPCM)
 
-  line(width/2 - 2.0*PPCM, height/2 ,
+  //Horizontal guides
+  line(width/2 - 2.0*PPCM, height/2,
       width/2 + 2.0*PPCM, height/2)
 
   line(width/2 - 2.0*PPCM, height/2 + 1.0*PPCM,
@@ -141,104 +140,25 @@ function drawMainGrid() {
   fill(0, 0, 0); //defines the text color
   text('ABC', width/2 - 1.5*PPCM ,height/2 - 0.4*PPCM);
   text('DEF', width/2 - 0.5*PPCM ,height/2 - 0.4*PPCM);
-  text('GHI', width/2 + 0.5*PPCM ,height/2 - 0.4*PPCM);
-  text('<-', width/2 + 1.5*PPCM ,height/2 - 0.4*PPCM);
 
-  text('JKL', width/2 - 1.5*PPCM ,height/2 + 0.6*PPCM);
-  text('MNO', width/2 - 0.5*PPCM ,height/2 + 0.6*PPCM);
-  text('PQR', width/2 + 0.5*PPCM ,height/2 + 0.6*PPCM);
-  text('\'', width/2 + 1.5*PPCM ,height/2 + 0.6*PPCM);
+  fill(0, 128, 0);
+  text('Complete', width/2 + 1.0*PPCM ,height/2 - 0.4*PPCM);
 
-  text('STU', width/2 - 1.5*PPCM ,height/2 + 1.6*PPCM);
-  text('VWX', width/2 - 0.5*PPCM ,height/2 + 1.6*PPCM);
-  text('YZ', width/2 + 0.5*PPCM ,height/2 + 1.6*PPCM);
-  text('-___-', width/2 + 1.5*PPCM ,height/2 + 1.6*PPCM);
-}
-
-function drawSubMenu() {
-  //Draws the new "canvas"
-  stroke(2);
-  fill(255, 255, 255);
-  rect(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 3.5*PPCM, 2.5*PPCM);
-  noStroke();
-
-  //Draws the guidelines
   fill(0, 0, 0);
-  stroke(2);
-  line(width/2 - 1.75*PPCM, height/2 + 0.5*PPCM,
-      width/2 + 1.75*PPCM, height/2 + 0.5*PPCM )
+  text('GHI', width/2 - 1.5*PPCM ,height/2 + 0.6*PPCM);
+  text('JKL', width/2 - 0.5*PPCM ,height/2 + 0.6*PPCM);
+  text('MNO', width/2 + 0.5*PPCM ,height/2 + 0.6*PPCM);
+  text('|__|', width/2 + 1.5*PPCM ,height/2 + 0.6*PPCM);
 
-  line(width/2 - 0.58*PPCM, height/2 - 0.75*PPCM,
-      width/2 - 0.58*PPCM, height/2 + 0.5*PPCM )
-
-  line(width/2 + 0.58*PPCM, height/2 - 0.75*PPCM,
-      width/2 + 0.58*PPCM, height/2 + 0.5*PPCM )
-  noStroke();
-
-
-  //Draws the cancel "button"
-  textSize(18);
-  fill(0, 0, 0);
-  text('Cancel', width/2, height/2 + 1.225*PPCM);
-
-  //Defines the appearance and interactivity of each submenu
-  switch (submenu) {
-    case 1: {
-      letters_menu = ['A', 'B', 'C'];
-      letters_submenu = ['a', 'b', 'c'];
-      break;
-    }
-    case 2: {
-      letters_menu = ['D', 'E', 'F'];
-      letters_submenu = ['d', 'e', 'f'];
-      break;
-    }
-    case 3: {
-      letters_menu = ['G', 'H', 'I'];
-      letters_submenu = ['g', 'h', 'i'];
-      break;
-    }
-    case 4: {
-      letters_menu = ['J', 'K', 'L'];
-      letters_submenu = ['j', 'k', 'l'];
-      break;
-    }
-    case 5: {
-      letters_menu = ['M', 'N', 'O'];
-      letters_submenu = ['m', 'n', 'o'];
-      break;
-    }
-    case 6: {
-      letters_menu = ['P', 'Q', 'R'];
-      letters_submenu = ['p', 'q', 'r'];
-      break;
-    }
-    case 7: {
-      letters_menu = ['S', 'T', 'U'];
-      letters_submenu = ['s', 't', 'u'];
-      break;
-    }
-    case 8: {
-      letters_menu = ['V', 'W', 'X'];
-      letters_submenu = ['v', 'w', 'x'];
-      break;
-    }
-    case 9: {
-      letters_menu = ['Y', '', 'Z'];
-      letters_submenu = ['y', '', 'z'];
-      break;
-    }
-    default:
-      break;
-  }
-
-  text(letters_menu[0], width/2 - 1.165*PPCM, height/2);
-  text(letters_menu[1], width/2, height/2);
-  text(letters_menu[2], width/2 + 1.165*PPCM, height/2);
+  text('PQRS', width/2 - 1.5*PPCM ,height/2 + 1.6*PPCM);
+  text('TUV', width/2 - 0.5*PPCM ,height/2 + 1.6*PPCM);
+  text('WXYZ', width/2 + 0.5*PPCM ,height/2 + 1.6*PPCM);
+  text('<-', width/2 + 1.5*PPCM ,height/2 + 1.6*PPCM);
 }
 
 //Draws the non-interactive area
 function drawUpperScreen() {
+  /*
   const letterDistance = 0.2*PPCM;
 
   textAlign(LEFT);
@@ -256,6 +176,13 @@ function drawUpperScreen() {
     }
   }
   textAlign(CENTER);
+   */
+  textSize(20);
+  fill(0, 128, 0);
+
+  //for testing
+  text(lastWord, width/2, height / 2 - 1.3*PPCM);
+
 }
 
 // Evoked when the mouse button was pressed
@@ -263,7 +190,8 @@ function mousePressed()
 {
   // Only look for mouse presses during the actual test
   if (draw_finger_arm)
-  {                   
+  {
+    /*
     // Check if mouse click happened within the touch input area
     if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  
     {
@@ -404,7 +332,159 @@ function mousePressed()
       }
     }
   }
+     */
+    // Check if mouse click happened within the touch input area
+    if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM)) {
+      let letters;
+
+      // If the user clicks the ABC square
+      if (mouseClickWithin(width / 2 - 2.0 * PPCM,
+          height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+        letters = ['a', 'b', 'c'];
+        checkSequentialClicks(letters,1);
+      }
+      //If the user clicks the DEF square
+      else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
+          height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
+        letters = ['d', 'e', 'f'];
+        checkSequentialClicks(letters,2);
+      }
+      //If the user clicks the GHI square
+      else if (mouseClickWithin(width / 2 - 2.0 * PPCM,
+          height / 2, PPCM, PPCM)) {
+        letters = ['g', 'h', 'i'];
+        checkSequentialClicks(letters,3);
+      }
+      //If the user clicks the JKL square
+      else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
+          height / 2, PPCM, PPCM)) {
+        letters = ['j', 'k', 'l'];
+        checkSequentialClicks(letters,4);
+      }
+      //If the user clicks the MNO square
+      else if (mouseClickWithin(width / 2,
+          height / 2, PPCM, PPCM)) {
+        letters = ['m', 'n', 'o'];
+        checkSequentialClicks(letters,5);
+      }
+      //If the user clicks the PQRS square
+      else if (mouseClickWithin(width / 2 - 2.0 * PPCM,
+          height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
+        letters = ['p', 'q', 'r', 's'];
+        checkSequentialClicks(letters,6);
+      }
+      ////If the user clicks the TUV square
+      else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
+          height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
+        letters = ['t', 'u', 'v'];
+        checkSequentialClicks(letters,7);
+      }
+      //If the user clicks the WXYZ square
+      else if (mouseClickWithin(width / 2,
+          height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
+        letters = ['w', 'x', 'y', 'z'];
+        checkSequentialClicks(letters,8);
+      }
+
+      //If the user clicks auto-complete
+      else if (mouseClickWithin(width / 2, height / 2 - 1.0 * PPCM,
+          2.0 * PPCM, PPCM)) {
+        //auto-complete
+        lastMenu = 0;
+        lastWord = '';
+      }
+
+      //If the user clicks space
+      else if (mouseClickWithin(width / 2 + 1.0 * PPCM, height / 2,
+          2.0 * PPCM, PPCM)) {
+        currently_typed += ' ';
+        lastMenu = 0;
+        lastWord = '';
+
+      }
+
+      //If the user clicks space
+      else {
+        currently_typed = currently_typed.substring(0, currently_typed.length - 1);
+        lastMenu = 0;
+        lastWord = '';
+      }
+    }
+
+
+    // Check if mouse click happened within 'ACCEPT'
+    // (i.e., submits a phrase and completes a trial)
+    else if (mouseClickWithin(width/2 - 2*PPCM, height/2 - 5.1*PPCM, 4.0*PPCM, 2.0*PPCM))
+    {
+      // Saves metrics for the current trial
+      letters_expected += target_phrase.trim().length;
+      letters_entered += currently_typed.trim().length;
+      errors += computeLevenshteinDistance(currently_typed.trim(), target_phrase.trim());
+      entered[current_trial] = currently_typed;
+      trial_end_time = millis();
+
+      current_trial++;
+
+      // Check if the user has one more trial/phrase to go
+      if (current_trial < 2)
+      {
+        // Prepares for new trial
+        currently_typed = "";
+        target_phrase = phrases[current_trial];
+      }
+      else
+      {
+        // The user has completed both phrases for one attempt
+        draw_finger_arm = false;
+        attempt_end_time = millis();
+
+        printAndSavePerformance();        // prints the user's results on-screen and sends these to the DB
+        attempt++;
+
+        // Check if the user is about to start their second attempt
+        if (attempt < 2)
+        {
+          second_attempt_button = createButton('START 2ND ATTEMPT');
+          second_attempt_button.mouseReleased(startSecondAttempt);
+          second_attempt_button.position(width/2 - second_attempt_button.size().width/2, height/2 + 200);
+        }
+      }
+    }
+  }
 }
+
+function checkSequentialClicks(letters, currentMenu) {
+  //If the menu selected earlier was this one
+  if(lastMenu === currentMenu) {
+    //And we are still on sequential selection
+    if(millis() <= nextChange) {
+
+      currently_typed = currently_typed.substring(0, currently_typed.length - 1);
+      currently_typed += letters[(letters.indexOf(lastLetter) + 1) % letters.length];
+
+      lastWord = lastWord.substring(0, lastWord.length - 1);
+      lastWord += letters[(letters.indexOf(lastLetter) + 1) % letters.length];
+
+      lastLetter = letters[(letters.indexOf(lastLetter) + 1) % letters.length];
+    }
+    //We are timed out, therefore select a next letter
+    else {
+      currently_typed += letters[0];
+      lastWord += letters[0];
+      lastLetter = letters[0];
+    }
+  }
+  //If the menu selected earlier wasn't this one
+  //We add a new letter and reset the timer
+  else {
+    currently_typed += letters[0];
+    lastWord += letters[0];
+    lastLetter = letters[0];
+    lastMenu = currentMenu;
+  }
+  nextChange = millis() + timer;
+}
+
 
 // Resets variables for second attempt
 function startSecondAttempt()

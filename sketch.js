@@ -246,36 +246,15 @@ function drawUpperScreen() {
   fill(0, 0, 0);
 
   let initialWidth = width/ 2 - 1.8*PPCM;
-  let numberLetters = 3.6* PPCM / letterDistance;
-
-  if(int(numberLetters/2) >= currently_typed.length) {
-    for(let i = 0; i < numberLetters; i++) {
-      text(phrases[current_trial][i], initialWidth, height / 2 - 1.3 * PPCM);
-      initialWidth += textWidth(phrases[current_trial][i]);
-    }
-  }
-  else {
-    for (let i = 0; i < numberLetters; i++) {
-      text(phrases[current_trial][currently_typed.length - int(numberLetters/2) + i], initialWidth, height / 2 - 1.3 * PPCM);
-      initialWidth += textWidth(phrases[current_trial][currently_typed.length - int(numberLetters/2) + i]);
-    }
-  }
-
-  initialWidth = width/ 2 - 1.8*PPCM;
+  let numberLetters = 5.6* PPCM / letterDistance;
 
   for(let i = 0; i < currently_typed.length; i++) {
     if (i > currently_typed.length - 1 - int(numberLetters / 2) && i <= currently_typed.length - 1 + int(numberLetters / 2)) {
-      if (i >= phrases[current_trial].length || phrases[current_trial][i] !== currently_typed[i]) {
-        fill(255, 0, 0);
-      } else {
-        fill(0, 128, 0);
-      }
       text(currently_typed[i], initialWidth, height / 2 - 1.3 * PPCM);
 
-      initialWidth += textWidth(phrases[current_trial][i]);
+      initialWidth += textWidth(currently_typed[i]);
     }
   }
-
   textAlign(CENTER);
 }
 

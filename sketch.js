@@ -51,6 +51,9 @@ let nextChange;
 let lastLetter = '';
 let lastWord = '';
 
+let wordsBank;
+let predictedWord;
+
 
 // Runs once before the setup() and loads our data (images, phrases)
 function preload()
@@ -65,6 +68,9 @@ function preload()
   // Loads UI elements for our basic keyboard
   leftArrow = loadImage("data/left.png");
   rightArrow = loadImage("data/right.png");
+
+  wordsBank = loadStrings('parsedText.txt');
+  predictedWord = '';
 }
 
 // Runs once at the start
@@ -158,31 +164,17 @@ function drawMainGrid() {
 
 //Draws the non-interactive area
 function drawUpperScreen() {
-  /*
-  const letterDistance = 0.2*PPCM;
+  if(lastWord !== '')
+    predictedWord = wordsBank.filter((word)=>word.startsWith(lastWord))[0];
 
-  textAlign(LEFT);
-  textSize(18);
-  fill(0, 0, 0);
-
-  let initialWidth = width/ 2 - 1.8*PPCM;
-  let numberLetters = 5.6* PPCM / letterDistance;
-
-  for(let i = 0; i < currently_typed.length; i++) {
-    if (i > currently_typed.length - 1 - int(numberLetters / 2) && i <= currently_typed.length - 1 + int(numberLetters / 2)) {
-      text(currently_typed[i], initialWidth, height / 2 - 1.3 * PPCM);
-
-      initialWidth += textWidth(currently_typed[i]);
-    }
-  }
-  textAlign(CENTER);
-   */
   textSize(20);
+  fill(0, 0, 0);
+  let offset = textWidth(predictedWord) / 2;
+  text(predictedWord, width / 2, height / 2 - 1.3*PPCM);
   fill(0, 128, 0);
-
-  //for testing
-  text(lastWord, width/2, height / 2 - 1.3*PPCM);
-
+  textAlign(LEFT);
+  text(lastWord, width/2 - offset, height / 2 - 1.3*PPCM);
+  textAlign(CENTER);
 }
 
 // Evoked when the mouse button was pressed
@@ -247,9 +239,10 @@ function mousePressed()
       //If the user clicks auto-complete
       else if (mouseClickWithin(width / 2, height / 2 - 1.0 * PPCM,
           2.0 * PPCM, PPCM)) {
-        //auto-complete
+        currently_typed += predictedWord.substring(lastWord.length) + ' ';
         lastMenu = 0;
         lastWord = '';
+        predictedWord = '';
       }
 
       //If the user clicks space
@@ -258,14 +251,14 @@ function mousePressed()
         currently_typed += ' ';
         lastMenu = 0;
         lastWord = '';
-
+        predictedWord = '';
       }
 
-      //If the user clicks space
+      //If the user clicks backspace
       else {
         currently_typed = currently_typed.substring(0, currently_typed.length - 1);
         lastMenu = 0;
-        lastWord = '';
+        lastWord = lastWord.substring(0, lastWord.length - 1);
       }
     }
 
@@ -287,6 +280,7 @@ function mousePressed()
       {
         // Prepares for new trial
         currently_typed = "";
+        lastWord = "";
         target_phrase = phrases[current_trial];
       }
       else

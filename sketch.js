@@ -191,148 +191,6 @@ function mousePressed()
   // Only look for mouse presses during the actual test
   if (draw_finger_arm)
   {
-    /*
-    // Check if mouse click happened within the touch input area
-    if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM))  
-    {
-      textSize(14);
-      //If the user is in the main screen
-      if(!submenu_opened) {
-        if (mouseClickWithin(width / 2 - 2.0 * PPCM,
-            height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-          //open submenu 1
-          submenu_opened = true;
-          submenu = 1;
-        }
-        else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
-            height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-          //open submenu 2
-          submenu_opened = true;
-          submenu = 2;
-        }
-        else if (mouseClickWithin(width / 2,
-            height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-          //open submenu 3
-          submenu_opened = true;
-          submenu = 3;
-        }
-        //If the user clicks on the backspace
-        else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
-            height / 2 - 1.0 * PPCM, PPCM, PPCM)) {
-          currently_typed = currently_typed.substring(0, currently_typed.length - 1);
-        }
-        else if (mouseClickWithin(width / 2 - 2.0 * PPCM,
-            height / 2, PPCM, PPCM)) {
-          //open submenu 4
-          submenu_opened = true;
-          submenu = 4;
-        }
-        else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
-            height / 2, PPCM, PPCM)) {
-          //open submenu 5
-          submenu_opened = true;
-          submenu = 5;
-        }
-        else if (mouseClickWithin(width / 2,
-            height / 2, PPCM, PPCM)) {
-          //open submenu 6
-          submenu_opened = true;
-          submenu = 6;
-        }
-        //If the user clicks '
-        else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
-            height / 2, PPCM, PPCM)) {
-          currently_typed += '\'';
-
-        }
-        else if (mouseClickWithin(width / 2 - 2.0 * PPCM,
-            height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
-          //open submenu 7
-          submenu_opened = true;
-          submenu = 7;
-        }
-        else if (mouseClickWithin(width / 2 - 1.0 * PPCM,
-            height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
-          //open submenu 8
-          submenu_opened = true;
-          submenu = 8;
-        }
-        else if (mouseClickWithin(width / 2,
-            height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
-          //open submenu 9
-          submenu_opened = true;
-          submenu = 9;
-        }
-        //If the user clicks the space
-        else if (mouseClickWithin(width / 2 + 1.0 * PPCM,
-            height / 2 + 1.0 * PPCM, PPCM, PPCM)) {
-          if(currently_typed.length > 0)
-            currently_typed += ' ';
-        }
-      }
-      //If the user is in one of the submenus
-      else {
-        //If the user clicks in the submenu
-        if(mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 3.5*PPCM, 2.5*PPCM)) {
-          //if the user clicks in the first upper square
-          if (mouseClickWithin(width/2 - 1.75*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
-            currently_typed += letters_submenu[0];
-          }
-          //if the user clicks in the second upper square
-          else if (mouseClickWithin(width/2 - 0.58*PPCM, height/2 - 0.75*PPCM, 1.16*PPCM, 1.25*PPCM)) {
-            if(submenu !== 9)
-              currently_typed += letters_submenu[1];
-          }
-          //if the user clicks in the third upper square
-          else if (mouseClickWithin(width/2 + 0.58*PPCM, height/2 - 0.75*PPCM, 1.17*PPCM, 1.25*PPCM)) {
-            currently_typed += letters_submenu[2];
-          }
-          submenu = 0;
-          submenu_opened = false;
-        }
-      }
-    }
-    
-    // Check if mouse click happened within 'ACCEPT' 
-    // (i.e., submits a phrase and completes a trial)
-    else if (mouseClickWithin(width/2 - 2*PPCM, height/2 - 5.1*PPCM, 4.0*PPCM, 2.0*PPCM))
-    {
-      // Saves metrics for the current trial
-      letters_expected += target_phrase.trim().length;
-      letters_entered += currently_typed.trim().length;
-      errors += computeLevenshteinDistance(currently_typed.trim(), target_phrase.trim());
-      entered[current_trial] = currently_typed;
-      trial_end_time = millis();
-
-      current_trial++;
-
-      // Check if the user has one more trial/phrase to go
-      if (current_trial < 2)                                           
-      {
-        // Prepares for new trial
-        currently_typed = "";
-        target_phrase = phrases[current_trial];  
-      }
-      else
-      {
-        // The user has completed both phrases for one attempt
-        draw_finger_arm = false;
-        attempt_end_time = millis();
-        
-        printAndSavePerformance();        // prints the user's results on-screen and sends these to the DB
-        attempt++;
-
-        // Check if the user is about to start their second attempt
-        if (attempt < 2)
-        {
-          second_attempt_button = createButton('START 2ND ATTEMPT');
-          second_attempt_button.mouseReleased(startSecondAttempt);
-          second_attempt_button.position(width/2 - second_attempt_button.size().width/2, height/2 + 200);
-        }
-      }
-    }
-  }
-     */
     // Check if mouse click happened within the touch input area
     if(mouseClickWithin(width/2 - 2.0*PPCM, height/2 - 1.0*PPCM, 4.0*PPCM, 3.0*PPCM)) {
       let letters;
@@ -411,7 +269,6 @@ function mousePressed()
       }
     }
 
-
     // Check if mouse click happened within 'ACCEPT'
     // (i.e., submits a phrase and completes a trial)
     else if (mouseClickWithin(width/2 - 2*PPCM, height/2 - 5.1*PPCM, 4.0*PPCM, 2.0*PPCM))
@@ -455,10 +312,7 @@ function mousePressed()
 
 function checkSequentialClicks(letters, currentMenu) {
   //If the menu selected earlier was this one
-  if(lastMenu === currentMenu) {
-    //And we are still on sequential selection
-    if(millis() <= nextChange) {
-
+  if(lastMenu === currentMenu && millis() <= nextChange) {
       currently_typed = currently_typed.substring(0, currently_typed.length - 1);
       currently_typed += letters[(letters.indexOf(lastLetter) + 1) % letters.length];
 
@@ -466,16 +320,7 @@ function checkSequentialClicks(letters, currentMenu) {
       lastWord += letters[(letters.indexOf(lastLetter) + 1) % letters.length];
 
       lastLetter = letters[(letters.indexOf(lastLetter) + 1) % letters.length];
-    }
-    //We are timed out, therefore select a next letter
-    else {
-      currently_typed += letters[0];
-      lastWord += letters[0];
-      lastLetter = letters[0];
-    }
   }
-  //If the menu selected earlier wasn't this one
-  //We add a new letter and reset the timer
   else {
     currently_typed += letters[0];
     lastWord += letters[0];

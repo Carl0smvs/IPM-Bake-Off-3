@@ -354,6 +354,7 @@ function printAndSavePerformance()
   // DO NOT CHANGE THESE
   let attempt_duration = (attempt_end_time - attempt_start_time) / 60000;          // 60K is number of milliseconds in minute
   let wpm              = (letters_entered / 5.0) / attempt_duration;      
+  let CPS              = (wpm * 5.0) / 60;
   let freebie_errors   = letters_expected * 0.05;                                  // no penalty if errors are under 5% of chars
   let penalty          = max(0, (errors - freebie_errors) / attempt_duration); 
   let wpm_w_penalty    = max((wpm - penalty),0);                                   // minus because higher WPM is better: NET WPM

@@ -297,7 +297,7 @@ function mousePressed()
         {
           second_attempt_button = createButton('START 2ND ATTEMPT');
           second_attempt_button.mouseReleased(startSecondAttempt);
-          second_attempt_button.position(width/2 - second_attempt_button.size().width/2, height/2 + 200);
+          second_attempt_button.position(width/2 - second_attempt_button.size().width/2, height/2 + 220);
         }
       }
     }

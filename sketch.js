@@ -381,6 +381,7 @@ function printAndSavePerformance()
   text("Freebie errors: " + freebie_errors.toFixed(2), width / 2, height / 2 + h+40);
   text("Penalty: " + penalty.toFixed(2), width / 2, height / 2 + h+60);
   text("WPM with penalty: " + wpm_w_penalty.toFixed(2), width / 2, height / 2 + h+80);
+  text("CPS : " + CPS.toFixed(2), width / 2, height / 2 + h+100);
 
   // Saves results (DO NOT CHANGE!)
   let attempt_data = 

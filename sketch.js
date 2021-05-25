@@ -7,7 +7,7 @@
 
 // Database (CHANGE THESE!)
 const GROUP_NUMBER   = 41;      // add your group number here as an integer (e.g., 2, 3)
-const BAKE_OFF_DAY   = false;  // set to 'true' before sharing during the simulation and bake-off days
+const BAKE_OFF_DAY   = true;  // set to 'true' before sharing during the simulation and bake-off days
 const CLICK_TIMEOUT = 0.6;     //in seconds
 
 let PPI, PPCM;                 // pixel density (DO NOT CHANGE!)
@@ -281,6 +281,7 @@ function mousePressed()
         // Prepares for new trial
         currently_typed = "";
         lastWord = "";
+        predictedWord = "";
         target_phrase = phrases[current_trial];
       }
       else

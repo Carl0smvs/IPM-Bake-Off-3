@@ -9,6 +9,7 @@
 const GROUP_NUMBER   = 41;      // add your group number here as an integer (e.g., 2, 3)
 const BAKE_OFF_DAY   = true;  // set to 'true' before sharing during the simulation and bake-off days
 const CLICK_TIMEOUT = 0.6;     //in seconds
+const NUMBER_SHOWN_LETTERS = 10;  //on-screen letters
 
 let PPI, PPCM;                 // pixel density (DO NOT CHANGE!)
 let second_attempt_button;     // button that starts the second attempt (DO NOT CHANGE!)
@@ -164,17 +165,59 @@ function drawMainGrid() {
 
 //Draws the non-interactive area
 function drawUpperScreen() {
-  if(lastWord !== '')
-    predictedWord = wordsBank.filter((word)=>word.startsWith(lastWord))[0];
+  if(lastWord !== '') {
+
+    let predictedWords = wordsBank.filter((word) => word.startsWith(lastWord));
+
+    if (predictedWords.length > 0) {
+      if (lastWord === predictedWords[0])
+        if(predictedWords.length > 1)
+          predictedWord = predictedWords[1];
+        else
+          predictedWord = '';
+      else
+        predictedWord = predictedWords[0];
+    }
+    else predictedWord = '';
+  }
 
   textSize(20);
-  fill(0, 0, 0);
-  let offset = textWidth(predictedWord) / 2;
-  text(predictedWord, width / 2, height / 2 - 1.3*PPCM);
-  fill(0, 128, 0);
-  textAlign(LEFT);
-  text(lastWord, width/2 - offset, height / 2 - 1.3*PPCM);
-  textAlign(CENTER);
+
+  //If the word still fits in the screen
+  if(lastWord.length < NUMBER_SHOWN_LETTERS) {
+    let offset;
+    if(predictedWord !== '') offset = textWidth(predictedWord) / 2;
+    else                     offset = textWidth(lastWord) / 2;
+
+    fill(0, 0, 0);
+    text(predictedWord, width / 2, height / 2 - 1.3*PPCM);
+    fill(0, 128, 0);
+    textAlign(LEFT);
+    text(lastWord, width/2 - offset, height / 2 - 1.3*PPCM);
+    textAlign(CENTER);
+  }
+  else {
+    let offset;
+    if(predictedWord !== '') offset = textWidth(predictedWord.substring(predictedWord.length - NUMBER_SHOWN_LETTERS)) / 2;
+    else                     offset = textWidth(lastWord.substring(lastWord.length - NUMBER_SHOWN_LETTERS)) / 2;
+
+    let initialWidth = 0;
+
+
+    for(let i = 0; i < NUMBER_SHOWN_LETTERS; i++) {
+      textAlign(LEFT);
+      fill(0, 0, 0);
+      text(predictedWord[predictedWord.length - NUMBER_SHOWN_LETTERS + i], width / 2 - offset + initialWidth, height / 2 - 1.3*PPCM);
+      fill(0, 128, 0);
+      text(lastWord[lastWord.length - NUMBER_SHOWN_LETTERS + i], width / 2 - offset + initialWidth, height / 2 - 1.3*PPCM);
+      textAlign(CENTER);
+
+      if(predictedWord !== '')
+        initialWidth += textWidth(predictedWord[predictedWord.length - NUMBER_SHOWN_LETTERS + i]);
+      else
+        initialWidth += textWidth(lastWord[lastWord.length - NUMBER_SHOWN_LETTERS + i]);
+    }
+  }
 }
 
 // Evoked when the mouse button was pressed
@@ -257,8 +300,14 @@ function mousePressed()
       //If the user clicks backspace
       else {
         currently_typed = currently_typed.substring(0, currently_typed.length - 1);
-        lastMenu = 0;
         lastWord = lastWord.substring(0, lastWord.length - 1);
+
+        if(!currently_typed.endsWith(" ")) {
+          let list = currently_typed.split(" ");
+          lastWord = list[list.length - 1];
+          predictedWord = lastWord;
+        }
+        lastMenu = 0;
       }
     }
 
@@ -296,6 +345,10 @@ function mousePressed()
         // Check if the user is about to start their second attempt
         if (attempt < 2)
         {
+          currently_typed = "";
+          lastWord = "";
+          predictedWord = "";
+
           second_attempt_button = createButton('START 2ND ATTEMPT');
           second_attempt_button.mouseReleased(startSecondAttempt);
           second_attempt_button.position(width/2 - second_attempt_button.size().width/2, height/2 + 220);

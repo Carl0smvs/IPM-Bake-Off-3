@@ -208,32 +208,7 @@ function drawUpperScreen() {
     textAlign(CENTER);
   }
   else {
-    /*
     let offset;
-    if(predictedWord !== '') offset = textWidth(predictedWord.substring(predictedWord.length - NUMBER_SHOWN_LETTERS)) / 2;
-    else                     offset = textWidth(lastWord.substring(lastWord.length - NUMBER_SHOWN_LETTERS)) / 2;
-
-    let initialWidth = 0;
-
-
-    for(let i = 0; i < NUMBER_SHOWN_LETTERS; i++) {
-      textAlign(LEFT);
-      fill(0, 0, 0);
-      text(predictedWord[predictedWord.length - NUMBER_SHOWN_LETTERS + i], width / 2 - offset + initialWidth, height / 2 - 1.3*PPCM);
-      fill(0, 128, 0);
-      text(lastWord[lastWord.length - NUMBER_SHOWN_LETTERS + i], width / 2 - offset + initialWidth, height / 2 - 1.3*PPCM);
-      textAlign(CENTER);
-
-      if(predictedWord !== '')
-        initialWidth += textWidth(predictedWord[predictedWord.length - NUMBER_SHOWN_LETTERS + i]);
-      else
-        initialWidth += textWidth(lastWord[lastWord.length - NUMBER_SHOWN_LETTERS + i]);
-
-
-    }
-     */
-    let offset;
-    //if(predictedWord !== '') offset = textWidth(predictedWord.substring(predictedWord.length - NUMBER_SHOWN_LETTERS)) / 2;
     if(predictedWord !== '') offset = textWidth(lastWord.substring(lastWord.length - int(NUMBER_SHOWN_LETTERS / 2)));
     else                     offset = textWidth(lastWord.substring(lastWord.length - NUMBER_SHOWN_LETTERS)) / 2;
 
@@ -242,7 +217,6 @@ function drawUpperScreen() {
     if(predictedWord !== '') {
       for (let i = 0; i < predictedWord.length; i++) {
         if(i > lastWord.length - int(NUMBER_SHOWN_LETTERS / 2) && i < lastWord.length + int(NUMBER_SHOWN_LETTERS / 2)) {
-          //text(offset + initialWidth, width * 3/4, height / 2 - 1.3*PPCM);
           textAlign(LEFT);
           fill(0, 0, 0);
           text(predictedWord[i], width / 2 - offset + initialWidth, height / 2 - 1.3*PPCM);

@@ -10,6 +10,7 @@ const GROUP_NUMBER   = 41;      // add your group number here as an integer (e.g
 const BAKE_OFF_DAY   = true;  // set to 'true' before sharing during the simulation and bake-off days
 const CLICK_TIMEOUT = 0.6;     //in seconds
 const NUMBER_SHOWN_LETTERS = 14;  //on-screen letters
+const NUMBER_CROPPED_LETTERS = 10;
 
 let PPI, PPCM;                 // pixel density (DO NOT CHANGE!)
 let second_attempt_button;     // button that starts the second attempt (DO NOT CHANGE!)
@@ -165,7 +166,7 @@ function drawMainGrid() {
 
 //Draws the non-interactive area
 function drawUpperScreen() {
-  if(lastWord !== '') {
+  if (lastWord !== '') {
 
     let predictedWords = wordsBank.filter((word) => word.startsWith(lastWord));
 
@@ -179,42 +180,40 @@ function drawUpperScreen() {
     }
   }
 
-    textSize(20);
+  textSize(20);
 
-  //If the word still fits in the screen
-  if(lastWord.length < NUMBER_SHOWN_LETTERS) {
-    let offset;
-
-    if(predictedWord !== '') {
-      if(predictedWord.length < NUMBER_SHOWN_LETTERS)
-        offset = textWidth(predictedWord) / 2;
-      else
-        offset = textWidth(predictedWord.substring(0, NUMBER_SHOWN_LETTERS - 1)) / 2;
-    }
-    else
-      offset = textWidth(lastWord) / 2;
+  if (predictedWord !== '') {
+    let offset = textWidth(predictedWord) / 2;
 
     fill(0, 0, 0);
-    if(predictedWord.length < NUMBER_SHOWN_LETTERS)
-      text(predictedWord, width / 2, height / 2 - 1.3*PPCM);
-    else
-      text(predictedWord.substring(0, NUMBER_SHOWN_LETTERS - 1), width / 2, height / 2 - 1.3*PPCM);
-
+    text(predictedWord, width / 2, height / 2 - 1.3 * PPCM);
     fill(0, 128, 0);
     textAlign(LEFT);
-    text(lastWord, width/2 - offset, height / 2 - 1.3*PPCM);
+    text(lastWord, width / 2 - offset, height / 2 - 1.3 * PPCM);
     textAlign(CENTER);
   }
   else {
-    let offset = textWidth(lastWord.substring(lastWord.length - NUMBER_SHOWN_LETTERS)) / 2;
+    let offset;
     let initialWidth = 0;
-      for (let i = 0; i < NUMBER_SHOWN_LETTERS; i++) {
+    let letters_length;
+
+    if(lastWord.length <= NUMBER_CROPPED_LETTERS) {
+      fill(0, 128, 0);
+      text(lastWord, width / 2, height / 2 - 1.3 * PPCM);
+    }
+    else {
+      offset = textWidth(lastWord.substring(lastWord.length - NUMBER_CROPPED_LETTERS)) / 2;
+
+      letters_length = NUMBER_CROPPED_LETTERS;
+
+      for (let i = 0; i < letters_length; i++) {
         textAlign(LEFT);
         fill(0, 128, 0);
-        text(lastWord[lastWord.length - NUMBER_SHOWN_LETTERS + i], width / 2 - offset + initialWidth, height / 2 - 1.3 * PPCM);
+        text(lastWord[lastWord.length - letters_length + i], width / 2 - offset + initialWidth, height / 2 - 1.3 * PPCM);
         textAlign(CENTER);
-        initialWidth += textWidth(lastWord[lastWord.length - NUMBER_SHOWN_LETTERS + i]);
+        initialWidth += textWidth(lastWord[lastWord.length - letters_length + i]);
       }
+    }
   }
 }
 

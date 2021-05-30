@@ -128,20 +128,20 @@ function drawMainGrid() {
   stroke(3);
   //Vertical guides
   line(width/2 - 1.0*PPCM, height/2 - 1.0*PPCM,
-      width/2 - 1.0*PPCM, height/2 + 2.0*PPCM)
+      width/2 - 1.0*PPCM, height/2 + 2.0*PPCM);
 
   line(width/2, height/2 - 1.0*PPCM,
-      width/2, height/2 + 2.0*PPCM)
+      width/2, height/2 + 2.0*PPCM);
 
   line(width/2 + 1.0*PPCM, height/2,
-      width/2 + 1.0*PPCM, height/2 + 2.0*PPCM)
+      width/2 + 1.0*PPCM, height/2 + 2.0*PPCM);
 
   //Horizontal guides
   line(width/2 - 2.0*PPCM, height/2,
-      width/2 + 2.0*PPCM, height/2)
+      width/2 + 2.0*PPCM, height/2);
 
   line(width/2 - 2.0*PPCM, height/2 + 1.0*PPCM,
-      width/2 + 2.0*PPCM, height/2 + 1.0*PPCM)
+      width/2 + 2.0*PPCM, height/2 + 1.0*PPCM);
   noStroke();
 
   textSize(14);
@@ -374,7 +374,6 @@ function checkSequentialClicks(letters, currentMenu) {
   }
   nextChange = millis() + timer;
 }
-
 
 // Resets variables for second attempt
 function startSecondAttempt()
